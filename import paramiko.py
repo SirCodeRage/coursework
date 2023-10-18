@@ -1,10 +1,9 @@
 import paramiko
 import time 
 import getpass
-host = "os-xe-mgmt-latest.cisco.com" #no idea what this is for
-
-username = "bob"
-password = getpass.getpass()
+host = "192.168.56.101" #the ip address of the route 
+username = "prne"
+password = "cisco123"
 
 port = 8181
 command = 'show ip interface brief \n'
