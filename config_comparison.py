@@ -43,16 +43,6 @@ def telenet():
     file.write(config)
     config_setup()
     return (net_connect)
-
-option = input("which way would you like to access the router:\nPress 1 for ssh or press 2 for telnet:\n")
-if option == "1":
-    ssh()
-elif option =="2":
-    telenet()
-
-else:
-    print("please press 1 or 2")
-
 def config_setup(net_connect):
     from netmiko import ConnectHandler
     from difflib import unified_diff
@@ -67,5 +57,18 @@ def config_setup(net_connect):
         print("the running config is the same as the starting configuration")
     else:
         print("the file are different and here are the difference")
-        diff = unified_diff(startup_config.splitlines(), running_config.splitlines())
+        diff = unified_diff(start_config.splitlines(), running_config.splitlines())
         print('\n'.join(diff))
+
+option = input("which way would you like to access the router:\nPress 1 for ssh or press 2 for telnet:\n")
+if option == "1":
+    ssh()
+    config_setup()
+elif option =="2":
+    telenet()
+    config_setup()
+
+else:
+    print("please press 1 or 2")
+
+
