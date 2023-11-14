@@ -1,74 +1,73 @@
-#import the libraries that are used 
 import netmiko 
 import getpass
-import difflib
+from difflib import unified_diff
 
-def ssh(): # defines the function for ssh router 
+def ssh():
     from netmiko import ConnectHandler
-    iosv_l2 = { # define the parameter to connect to the router 
-    'device_type' : 'cisco_ios',
-    'ip' : '192.168.56.101', #ip address 
-    'username' : 'cisco', # routers username 
-    'password' : ''
+    
+    iosv_l2 = {
+        'device_type' : 'cisco_ios',
+        'ip' : '192.168.56.101',
+        'username' : 'cisco',
+        'password' : ''
     }
-    iosv_l2['password'] = getpass.getpass("Enter password:") # hides the password when typed and don't store it in varible 
+    iosv_l2['password'] = getpass.getpass("Enter password:")
     
     net_connect = ConnectHandler(**iosv_l2)   
-    command = ["exit","show ip int brief",'enable','config t','hostname R1']#  set of commands that are given to the router. it starts of in config t
+    command = ["exit", "show ip int brief", 'enable', 'config t', 'hostname R1']
     
     config = net_connect.send_config_set(command)
-    print(config) # print the 
+    print(config)
+    
     file = open("config_setup_ssh.txt", "w")
     file.write(config)
-    config_setup()
-    return(net_connect)
+    
+    return net_connect
 
 def telenet():
-
     from netmiko import ConnectHandler
     
     iosv_l2 = {
         'device_type' : 'cisco_ios_telnet',
         'ip' : '192.168.56.101',
         'username' : 'cisco',
-        'password' : '' #cisco123!
+        'password' : ''
     }
     iosv_l2['password'] = getpass.getpass("Enter password:")
+    
     net_connect = ConnectHandler(**iosv_l2)
     
-    command = ["exit","show ip int brief",'enable','config t','hostname R1']
+    command = ["exit", "show ip int brief", 'enable', 'config t', 'hostname R1']
     config = net_connect.send_config_set(command)
     print(config)
+    
     file = open("config_setup_telnet.txt", "w")
     file.write(config)
-    config_setup()
-    return (net_connect)
+    
+    return net_connect
+
 def config_setup(net_connect):
-    from netmiko import ConnectHandler
-    from difflib import unified_diff
-    #command = input("please enter a command") # show archive config differences 
-    running_config = net_connect.send_commannd("show running-config")
+    running_config = net_connect.send_command("show running-config")
     file = open("config_running.txt", "w")
     file.write(running_config)
-    start_config = net_connect.send_commannd("show startup-config")
-    file = open("config_running.txt", "w")
+    
+    start_config = net_connect.send_command("show startup-config")
+    file = open("config_startup.txt", "w")  # Change the file name
     file.write(start_config)
+    
     if running_config == start_config:
-        print("the running config is the same as the starting configuration")
+        print("The running config is the same as the starting configuration")
     else:
-        print("the file are different and here are the difference")
+        print("The files are different, and here are the differences:")
         diff = unified_diff(start_config.splitlines(), running_config.splitlines())
         print('\n'.join(diff))
 
-option = input("which way would you like to access the router:\nPress 1 for ssh or press 2 for telnet:\n")
+option = input("Which way would you like to access the router:\nPress 1 for SSH or press 2 for Telnet:\n")
 if option == "1":
-    ssh()
-    config_setup()
-elif option =="2":
-    telenet()
-    config_setup()
-
+    net_connect = ssh()
+    config_setup(net_connect)
+elif option == "2":
+    net_connect = telenet()
+    config_setup(net_connect)
 else:
-    print("please press 1 or 2")
-
-
+    print("Please press 1 or 2")
