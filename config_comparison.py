@@ -51,7 +51,7 @@ def config_setup(net_connect):
     file = open("config_running.txt", "w")
     file.write(running_config)
     start_config = net_connect.send_commannd("show startup-config")
-    file = open("config_running.txt", "w")
+    file = open("startup_running.txt", "w")
     file.write(start_config)
     if running_config == start_config:
         print("the running config is the same as the starting configuration")
@@ -59,6 +59,8 @@ def config_setup(net_connect):
         print("the file are different and here are the difference")
         diff = unified_diff(start_config.splitlines(), running_config.splitlines())
         print('\n'.join(diff))
+    
+    
 
 option = input("which way would you like to access the router:\nPress 1 for ssh or press 2 for telnet:\n")
 if option == "1":
