@@ -61,7 +61,7 @@ def config_setup(net_connect):
         print("The files are different, and here are the differences:")
         diff = list(unified_diff(start_config.splitlines(), running_config.splitlines()))
         for line in diff:
-            if line.startswith("+ ") or line.startswith("- "):
+            if line.startswith("+") or line.startswith("-"):
                 print(line)
 
 option = input("Which way would you like to access the router:\nPress 1 for SSH or press 2 for Telnet:\n")
