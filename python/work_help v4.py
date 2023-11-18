@@ -41,9 +41,9 @@ def save_order():
 # Function to get the next order file name
 def get_next_order_filename():
     order_number = 1
-    while os.path.exists(f"C:\\Users\\James\\Documents\\course work\\python\\order_{order_number}.txt"):
+    while os.path.exists(f"order_{order_number}.txt"):
         order_number += 1
-    return f"C:\\Users\\James\\Documents\\course work\\python\\order_{order_number}.txt"
+    return f"order_{order_number}.txt"
 
 # Function to show a particular submenu
 def show_submenu(category):
