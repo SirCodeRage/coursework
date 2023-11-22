@@ -87,8 +87,7 @@ def compare_config(net_connect):
         for line in diff:
              if line.startswith("+") or line.startswith("-"):
                  print(line)
-
-
+    
 
 
 
@@ -99,8 +98,10 @@ if option == "1":
 elif option =="2":
     telenet()
     config_setup()
-
+elif option == "3" 
+    ssh()
+    compare_config()
 else:
-    print("please press 1 or 2")
+    print("please press one of the options")
 
 
