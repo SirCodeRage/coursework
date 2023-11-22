@@ -91,15 +91,14 @@ def compare_config(net_connect):
 
 
 
-option = input("which way would you like to access the router:\nPress 1 for ssh or press 2 for telnet:\n")
 if option == "1":
-    ssh()
-    config_setup()
-elif option =="2":
-    telenet()
-    config_setup()
+    net_connect = ssh()
+    config_setup(net_connect)
+elif option == "2":
+    net_connect = telenet()
+    config_setup(net_connect)
 elif option == "3": 
-    ssh()
+    net_connect = ssh()
     compare_config(net_connect)
 else:
     print("please press one of the options")
