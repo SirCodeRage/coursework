@@ -4,7 +4,7 @@ import getpass
 import difflib
 import os 
 global net_connnect
-def ssh(): # defines the function for ssh router 
+def ssh(): # defines the function for ssh router
     from netmiko import ConnectHandler
     iosv_l2 = { # define the parameter to connect to the router 
     'device_type' : 'cisco_ios',
