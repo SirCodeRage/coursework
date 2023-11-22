@@ -3,7 +3,7 @@ import netmiko
 import getpass
 import difflib
 import os 
-
+global net_connnect
 def ssh(): # defines the function for ssh router 
     from netmiko import ConnectHandler
     iosv_l2 = { # define the parameter to connect to the router 
@@ -21,8 +21,8 @@ def ssh(): # defines the function for ssh router
     print(config) # print the 
     file = open("config_setup_ssh.txt", "w")
     file.write(config)
-    config_setup()
-    return(net_connect)
+    config_setup(net_connect)
+    return net_connect
 
 def telenet():
 
@@ -42,12 +42,12 @@ def telenet():
     print(config)
     file = open("config_setup_telnet.txt", "w")
     file.write(config)
-    config_setup()
-    return (net_connect)
+    config_setup(net_connect)
+    return net_connect
 def config_setup(net_connect):
     from netmiko import ConnectHandler
     from difflib import unified_diff
-    #command = input("please enter a command") # show archive config differences 
+    #
     running_config = net_connect.send_command("show running-config")
     file = open("config_running.txt", "w")
     file.write(running_config)
@@ -98,9 +98,9 @@ if option == "1":
 elif option =="2":
     telenet()
     config_setup()
-elif option == "3" 
+elif option == "3": 
     ssh()
-    compare_config()
+    compare_config(net_connect)
 else:
     print("please press one of the options")
 
