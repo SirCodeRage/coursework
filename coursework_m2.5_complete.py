@@ -1,3 +1,7 @@
+#Traceback (most recent call last):
+  #File "/home/devasc/Downloads/coursework_m2.5_complete.py", line 97, in <module>
+    #config_setup()
+TypeError: config_setup() missing 1 required positional argument: 'net_connect
 #import the libraries that are used 
 import netmiko 
 import getpass
