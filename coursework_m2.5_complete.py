@@ -1,13 +1,9 @@
-#Traceback (most recent call last):
-  #File "/home/devasc/Downloads/coursework_m2.5_complete.py", line 97, in <module>
-    #config_setup()
-TypeError: config_setup() missing 1 required positional argument: 'net_connect
 #import the libraries that are used 
 import netmiko 
 import getpass
 import difflib
 import os 
-global net_connect
+net_connect = ""
 def ssh(): # defines the function for ssh router 
     from netmiko import ConnectHandler
     iosv_l2 = { # define the parameter to connect to the router 
@@ -104,8 +100,7 @@ elif option =="2":
     config_setup()
 elif option == "3": 
     ssh()
-    compare_config()
+    compare_config(net_connect)
 else:
     print("please press one of the options")
-
 
