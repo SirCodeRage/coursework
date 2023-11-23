@@ -1,3 +1,7 @@
+#file "/home/devasc/Downloads/coursework_m2.5_complete (1).py", line 51, in config_setup
+#    running_config = net_connect.send_command("show running-config")
+#AttributeError: 'str' object has no attribute 'send_command'
+#import the libraries that are used 
 #import the libraries that are used 
 import netmiko 
 import getpass
