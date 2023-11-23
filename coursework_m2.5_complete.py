@@ -40,6 +40,7 @@ def telenet():  # Defines the function for Telnet
     return net_connect
 
 def config_setup(net_connect):
+    from difflib import unified_diff
     running_config = net_connect.send_command("show running-config")
     with open("config_running.txt", "w") as file:
         file.write(running_config)
@@ -57,6 +58,7 @@ def config_setup(net_connect):
                 print(line)
 
 def compare_config(net_connect):
+    from difflib import unified_diff
     directory = os.path.dirname(os.path.abspath(__file__))  # Search for files in the same directory as the Python file
     files = os.listdir(directory)
     config_files = [x for x in files if "config" in x]
