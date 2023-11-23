@@ -64,7 +64,7 @@ def config_setup(net_connect):
             if line.startswith("+") or line.startswith("-"):
                 print(line)
     
-def compare_config():
+def compare_config(net_connect):
     from difflib import unified_diff
     directory = os.path.dirname(os.path.abspath(__file__)) # using the OS libary it is searching for files in the same directory as the python file is stored for the files that contain the word 'config'
     files = os.listdir(directory)
@@ -94,10 +94,10 @@ def compare_config():
 option = input("which way would you like to access the router:\nPress 1 for ssh or press 2 for telnet:\n")
 if option == "1":
     ssh()
-    config_setup()
+    config_setup(net_connect)
 elif option =="2":
     telenet()
-    config_setup()
+    config_setup(net_connect)
 elif option == "3": 
     ssh()
     compare_config(net_connect)
