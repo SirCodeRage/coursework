@@ -1,34 +1,41 @@
 import netmiko, getpass,difflib,os
 from netmiko import ConnectHandler
 def connection():
-    connection_option = input("Did you want to connect via ssh or Telnet").lower()
+    connection_option = input("Do you want to connect via SSH or Telnet? ").lower()
     if connection_option == "ssh":
-        type = "cisco_ios"
+        device_type = "cisco_ios"
     elif connection_option == "telnet":     
-        type = "cisco_ios_telnet"
+        device_type = "cisco_ios_telnet"
     elif connection_option == "test":
         iosv_l2 = {
-                 'device_type': type,
-                 'ip': '192.168.56.101',  # IP address of the router
-                 'username': 'cisco',     # Router's username
-                 'password': getpass.getpass("Enter password:")
-                 }# password is hidden when entered
-        net_connect = ConnectHandler(**iosv_l2)
-        menu(net_connect)
-    else:
-        print("please enter a valid response")
-        connection()
-    if connection_option != "test":
-        iosv_l2 = {
-            'device_type': type,
+            'device_type': 'cisco_ios',
             'ip': '192.168.56.101',  # IP address of the router
             'username': 'cisco',     # Router's username
-            'password': getpass.getpass("Enter password:")  # password is hidden when entered 
-            }
+            'password': 'cisco123!', # Example password
+        }
 
-        # Establishing the SSH connection
         net_connect = ConnectHandler(**iosv_l2)
         menu(net_connect)
+    
+    else:
+        print("Please enter a valid response.")
+        connection()
+        return
+
+    if connection_option != "test":
+        while True:
+            try:
+                iosv_l2 = {
+                    'device_type': device_type,
+                    'ip': '192.168.56.101',  # IP address of the router
+                    'username': 'cisco',     # Router's username
+                    'password': getpass.getpass("Enter password:")  # password is hidden when entered
+                }
+                net_connect = ConnectHandler(**iosv_l2)
+                menu(net_connect)
+                break  # Exit the loop if connection is successful
+            except Exception as e:
+                print("Authentication failed:", e)
     return(net_connect)
 def config_setup(net_connect): ## need to sort out files. 
     start_config = net_connect.send_command("show startup-config")
@@ -76,8 +83,9 @@ def compare_config(net_connect):
         for line in diff:
             if line.startswith("+") or line.startswith("-"):
                 print(line)
+    menu()
 def advance_setup(net_connect):
-    option = input("which of the folowing would you like to setup 1.Loopback 2. OSPF   3.EIGRP 4. RIP ")
+    option = input("which of the folowing would you like to setup 1.Loopback 2. OSPF   3.EIGRP 4. RIP \n ")
     loop = True
     while loop == True:
         if option == "1":
@@ -109,6 +117,7 @@ def advance_setup(net_connect):
    
     config = net_connect.send_config_set(command)
     print (command," have been sent to the route and here is the output" , config)
+    menu()
 def menu(net_connect):
     option = input("Welcome\n Now that you have connect which of the following option would you to do.\n 1) set up the router basic\n 2) Compare the configuations\n 3) advanced setup ")
     if option == "1":
