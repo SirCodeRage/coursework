@@ -1,7 +1,7 @@
 import netmiko, getpass,difflib,os
 from netmiko import ConnectHandler
 def connection():
-    connection_option = input("Do you want to connect via SSH or Telnet? ").lower()
+    connection_option = input("Do you want to connect via SSH or Telnet? \n").lower()
     if connection_option == "ssh":
         device_type = "cisco_ios"
     elif connection_option == "telnet":     
@@ -83,7 +83,7 @@ def compare_config(net_connect):
         for line in diff:
             if line.startswith("+") or line.startswith("-"):
                 print(line)
-    menu()
+    menu(net_connect)
 def advance_setup(net_connect):
     option = input("which of the folowing would you like to setup 1.Loopback 2. OSPF   3.EIGRP 4. RIP \n ")
     loop = True
@@ -102,7 +102,7 @@ def advance_setup(net_connect):
             keyword = "EIGRP"
         else:
             print("please enter a valid number")
-                  
+            loop =False      
     start_reading = False 
     command = []             
     with open("commands.txt", 'r') as file: # this code the txt file commands.txt then does though the file line by line looking for the keyword then saves the commands as commands 
@@ -128,7 +128,7 @@ def menu(net_connect):
         advance_setup(net_connect)
     else:
         print("please enter 1,2 or 3")
-        menu()
+        menu(net_connect)
     
 
 connection()
