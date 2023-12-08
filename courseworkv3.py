@@ -15,6 +15,9 @@ def connection():
         }
 
         net_connect = ConnectHandler(**iosv_l2)
+        start_config = net_connect.send_command("show startup-config")
+        with open("config_setup.txt", "w") as file:
+          file.write(start_config)
         menu(net_connect)
     
     else:
@@ -32,13 +35,17 @@ def connection():
                     'password': getpass.getpass("Enter password:")  # password is hidden when entered
                 }
                 net_connect = ConnectHandler(**iosv_l2)
+                start_config = net_connect.send_command("show startup-config")
+                with open("config_setup.txt", "w") as file:
+                  file.write(start_config)
                 menu(net_connect)
                 break  # Exit the loop if connection is successful
             except Exception as e:
                 print("Authentication failed:", e)
+    
     return(net_connect)
 def config_setup(net_connect): ## need to sort out files. 
-    start_config = net_connect.send_command("show startup-config")
+    
       # varible to store commands 
     command = ["exit", "show ip int brief", 'enable', 'config t', 'hostname R1']
 
@@ -49,8 +56,7 @@ def config_setup(net_connect): ## need to sort out files.
     # Writing the output to a file
     with open("config_setup.txt", "w") as file:
        file.write(config)
-    with open("config_setup.txt", "w") as file:
-      file.write(start_config)
+   
     
     running_config = net_connect.send_command("show running-config")
     with open("config_running.txt", "w") as file:
@@ -85,21 +91,26 @@ def compare_config(net_connect):
                 print(line)
     menu(net_connect)
 def advance_setup(net_connect):
-    option = input("which of the folowing would you like to setup 1.Loopback 2. OSPF   3.EIGRP 4. RIP \n ")
+    option = input("which of the folowing would you like to setup \n1.Loopback\n2. OSPF\n3. EIGRP 4. RIP  5) back\n>")
     loop = True
     while loop == True:
         if option == "1":
             keyword = "loopback"
             loop = False
-        if option == "2":
+        elif option == "2":
             keyword = "OSPF"
             loop = False
-        if option == "3":
+        elif option == "3":
             keyword = "EIGRP"
             loop = False
-        if option == "3":
+        elif option == "3":
             loop = False
             keyword = "EIGRP"
+        elif option =="4":
+            loop = False
+            keyword = "RIP"
+        elif option == "5":
+            menu(net_connect)
         else:
             print("please enter a valid number")
             loop =False      
@@ -116,12 +127,15 @@ def advance_setup(net_connect):
                 command.append(line.strip())
    
     config = net_connect.send_config_set(command)
+    with open(keyword,".txt", "w") as file:
+       file.write(config)
     print (command," have been sent to the route and here is the output" , config)
-    menu()
+    menu(net_connect)
 def menu(net_connect):
     option = input("Welcome\n Now that you have connect which of the following option would you to do.\n 1) set up the router basic\n 2) Compare the configuations\n 3) advanced setup ")
     if option == "1":
         config_setup(net_connect)
+        
     elif option == "2":
         compare_config(net_connect)
     elif option == "3":
@@ -129,6 +143,6 @@ def menu(net_connect):
     else:
         print("please enter 1,2 or 3")
         menu(net_connect)
-    
+
 
 connection()
