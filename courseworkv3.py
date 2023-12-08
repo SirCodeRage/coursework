@@ -61,6 +61,7 @@ def config_setup(net_connect): ## need to sort out files.
     running_config = net_connect.send_command("show running-config")
     with open("config_running.txt", "w") as file:
         file.write(running_config)
+    menu(net_connect)
 def compare_config(net_connect):
     # finds all the config files saved in the same directory as the program 
     directory = os.path.dirname(os.path.abspath(__file__))
@@ -91,7 +92,7 @@ def compare_config(net_connect):
                 print(line)
     menu(net_connect)
 def advance_setup(net_connect):
-    option = input("which of the folowing would you like to setup \n1.Loopback\n2. OSPF\n3. EIGRP 4. RIP  5) back\n>")
+    option = input("which of the folowing would you like to setup \n1.Loopback\n2. OSPF\n3. EIGRP\n4. RIP\n5. back\n>")
     loop = True
     while loop == True:
         if option == "1":
@@ -127,12 +128,13 @@ def advance_setup(net_connect):
                 command.append(line.strip())
    
     config = net_connect.send_config_set(command)
-    with open(keyword,".txt", "w") as file:
-       file.write(config)
+    config_show = net_connect.send_config_set("show running config")
+    with open("config_" + keyword +".txt", "w") as file:
+       file.write(config_show)
     print (command," have been sent to the route and here is the output" , config)
     menu(net_connect)
 def menu(net_connect):
-    option = input("Welcome\n Now that you have connect which of the following option would you to do.\n 1) set up the router basic\n 2) Compare the configuations\n 3) advanced setup ")
+    option = input("Welcome\n Now that you have connect which of the following option would you to do.\n 1) set up the router basic\n 2) Compare the configuations\n 3) advanced setup\n> ")
     if option == "1":
         config_setup(net_connect)
         
